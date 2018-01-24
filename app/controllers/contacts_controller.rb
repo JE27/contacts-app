@@ -13,8 +13,11 @@ class ContactsController < ApplicationController
                            phone_number: params[:email],
                            bio: params[:bio]
                           )  
-    contacts.save
+    if contacts.save
     render json: contacts.as_json
+    else
+      render json: {errors: contacts.errors.full_messages}, status: :unprocessable_entity
+    end
   end
 
   def show
@@ -32,7 +35,12 @@ class ContactsController < ApplicationController
     contacts.email = params[email] || contacts.email
     contacts.bio = params[bio] || contacts.bio
 
+    if contacts.save
     render json: contacts.as_json
+    else
+      render json: {errors: contacts.errors.full_messages}, status: :unprocessable_entity
+    end
+    
   end
 
   def destroy
